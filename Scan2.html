@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escáner QR Asistencia</title>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8"></script>
+
+</head>
+
+<body>
+
+<h2>Escanear QR</h2>
+
+<div id="reader" style="width:320px"></div>
+
+<script>
+
+function onScanSuccess(decodedText, decodedResult) {
+
+    alert("QR leído: " + decodedText);
+
+    fetch("https://script.google.com/macros/s/AKfycbwGTEJ3TfyIYT0gCqt3eF2IDTusww5RNF7cyNETrXIHIMTI_c-gZFgmqqbRxHn_lPn0/exec?dni=" + decodedText)
+    .then(response => response.text())
+    .then(data => {
+
+        alert("Respuesta del servidor: " + data);
+
+    });
+
+}
+
+var html5QrcodeScanner = new Html5QrcodeScanner(
+    "reader",
+    { fps: 10, qrbox: 250 }
+);
+
+html5QrcodeScanner.render(onScanSuccess);
+
+</script>
+
+</body>
+</html>
