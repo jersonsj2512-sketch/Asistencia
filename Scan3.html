@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control de Asistencia QR</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+body{
+font-family:Arial;
+text-align:center;
+}
+
+#reader{
+width:320px;
+margin:auto;
+}
+
+#resultado{
+font-size:22px;
+margin-top:20px;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Escanear QR</h2>
+
+<div id="reader"></div>
+
+<div id="resultado"></div>
+
+<script>
+
+let ultimoQR="";
+
+function sonidoOK(){
+let audio=new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+audio.play();
+}
+
+function onScanSuccess(decodedText){
+
+if(decodedText==ultimoQR){
+return;
+}
+
+ultimoQR=decodedText;
+
+fetch("https://script.google.com/macros/s/AKfycbwGTEJ3TfyIYT0gCqt3eF2IDTusww5RNF7cyNETrXIHIMTI_c-gZFgmqqbRxHn_lPn0/exec?dni=" + decodedText)
+
+.then(r=>r.text())
+
+.then(data=>{
+
+document.getElementById("resultado").innerHTML=data;
+
+sonidoOK();
+
+});
+
+}
+
+var scanner=new Html5QrcodeScanner(
+"reader",
+{fps:10,qrbox:250}
+);
+
+scanner.render(onScanSuccess);
+
+</script>
+
+</body>
+
+</html>
